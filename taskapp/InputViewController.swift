@@ -19,6 +19,7 @@ class InputViewController: UIViewController {
     
     let realm = try! Realm()
     var task: Task!
+    let categoryList = try! Realm().objects(Category.self)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +31,20 @@ class InputViewController: UIViewController {
         titleTextField.text = task.title
         contentsTextView.text = task.contents
         datePicker.date = task.date
+        
+        // ピッカー設定
+        categoryPicker.delegate = self
+        categoryPicker.dataSource = self
+        categoryPicker.showsSelectionIndicator = true
+        
+        if task.category != nil {
+            categoryPicker.selectRow(task.category!.id, inComponent: 0, animated: true)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        categoryPicker.reloadAllComponents()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -37,6 +52,12 @@ class InputViewController: UIViewController {
             self.task.title = self.titleTextField.text!
             self.task.contents = self.contentsTextView.text
             self.task.date = self.datePicker.date
+            
+            if categoryList.count != 0 {
+                let category_id = categoryPicker.selectedRow(inComponent: 0)
+                self.task.category = categoryList[category_id]
+            }
+            
             self.realm.add(self.task, update: true)
         }
         
@@ -89,15 +110,23 @@ class InputViewController: UIViewController {
         // キーボードを閉じる
         view.endEditing(true)
     }
+}
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+extension InputViewController : UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    // ドラムロールの列数
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
     }
-    */
-
+    
+    // ドラムロールの行数
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return categoryList.count
+    }
+    
+    // ドラムロールの各タイトル
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        let categoryNameList = categoryList[row].name
+        return categoryNameList
+    }
 }
