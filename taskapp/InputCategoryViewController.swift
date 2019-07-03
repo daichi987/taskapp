@@ -23,8 +23,6 @@ class InputCategoryViewController: UIViewController {
         let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(dismissKeyboard))
         self.view.addGestureRecognizer(tapGesture)
         
-//        let category = Category()
-//        categoryTextField.text = category.name
         addCategoryBtn.isEnabled = false
     }
     

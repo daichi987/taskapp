@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="v9P-cY-Qsr">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="138" width="414" height="675"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" textLabel="LEk-9x-jyq" detailTextLabel="Nfb-hn-tTy" style="IBUITableViewCellStyleSubtitle" id="tZ3-J9-ota">
@@ -48,16 +48,44 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="K7f-R9-X3L">
+                                <rect key="frame" x="20" y="7" width="97" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ydi-p6-s0r">
+                                <rect key="frame" x="0.0" y="88" width="414" height="50"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="v9P-cY-Qsr" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="drd-ts-k20"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ydi-p6-s0r" secondAttribute="trailing" id="PTq-o9-0Zb"/>
+                            <constraint firstItem="v9P-cY-Qsr" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="drd-ts-k20"/>
+                            <constraint firstItem="ydi-p6-s0r" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="fAF-63-XYL"/>
                             <constraint firstItem="v9P-cY-Qsr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="g10-vi-hCW"/>
+                            <constraint firstItem="ydi-p6-s0r" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="gyv-6e-uUt"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="v9P-cY-Qsr" secondAttribute="bottom" id="mNy-tA-TXD"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="v9P-cY-Qsr" secondAttribute="trailing" id="qR7-Sx-zgZ"/>
+                            <constraint firstItem="v9P-cY-Qsr" firstAttribute="top" secondItem="ydi-p6-s0r" secondAttribute="bottom" id="x3N-Zg-Zey"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <toolbarItems>
+                        <barButtonItem style="plain" id="2P5-eU-Ck1">
+                            <textField key="customView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" id="F7b-0q-jpt">
+                                <rect key="frame" x="20" y="12" width="374" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </barButtonItem>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" id="zqI-Fc-VTc">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="C6w-ac-poe">
                             <connections>
@@ -65,8 +93,10 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="tableView" destination="v9P-cY-Qsr" id="whF-iF-03W"/>
+                        <outlet property="textField" destination="ydi-p6-s0r" id="LyB-yf-pv5"/>
                         <segue destination="qqd-YJ-XXR" kind="show" identifier="cellSegue" id="9rY-FU-K4E"/>
                     </connections>
                 </viewController>
@@ -220,7 +250,7 @@
                         <viewLayoutGuide key="safeArea" id="nGR-3E-bOO"/>
                     </view>
                     <connections>
-                        <outlet property="addCategoryBtn" destination="e1L-UM-laf" id="4A5-go-7Jv"/>
+                        <outlet property="addCategoryBtn" destination="e1L-UM-laf" id="t2V-Sv-bzA"/>
                         <outlet property="categoryTextField" destination="hqe-8b-tEG" id="VEF-XP-pPZ"/>
                     </connections>
                 </viewController>

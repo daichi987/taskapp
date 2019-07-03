@@ -10,9 +10,10 @@ import UIKit
 import RealmSwift
 import UserNotifications
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var textField: UITextField!
     
     // Realmインスタンスを取得する
     let realm = try! Realm()  // ←追加
@@ -21,13 +22,51 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // 日付近い順\順でソート：降順
     // 以降内容をアップデートするとリスト内は自動的に更新される。
     var taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: false)  // ←追加
+    var categoryList = try! Realm().objects(Category.self)
+    var categoryNameList = [""]
+    var pickerView: UIPickerView = UIPickerView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        textField.placeholder = "カテゴリで絞り込み"
+        
         tableView.delegate = self
         tableView.dataSource = self
+        
+        textField.delegate = self
+        
+        // ピッカー設定
+        pickerView.delegate = self
+        pickerView.dataSource = self
+        pickerView.showsSelectionIndicator = true
+        
+        // 決定バーの生成
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
+        let spacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+        toolbar.setItems([spacelItem, doneItem], animated: true)
+        
+        // インプットビュー設定
+        textField.inputView = pickerView
+        textField.inputAccessoryView = toolbar
+        
+        createCategoryNameList()
+    }
+    
+    // 決定ボタン押下
+    @objc func done() {
+        textField.endEditing(true)
+        textField.text = "\(categoryNameList[pickerView.selectedRow(inComponent: 0)])"
+        
+        print("searchText: \(textField.text!)")
+        if textField.text! != "" {
+            taskArray = try! Realm().objects(Task.self).filter("category.name = '\(textField.text!)'").sorted(byKeyPath: "date", ascending: false)
+        } else {
+            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: false)
+        }
+        tableView.reloadData()
     }
 
     // MARK: UITableViewDataSourceプロトコルのメソッド
@@ -48,7 +87,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         
         let dateString:String = formatter.string(from: task.date)
-        cell.detailTextLabel?.text = dateString
+        cell.detailTextLabel?.text = dateString + " (" + task.category!.name + ")"
         
         return cell
     }
@@ -115,6 +154,34 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
+        pickerView.reloadAllComponents()
+        categoryNameList = [""]
+        createCategoryNameList()
+    }
+    
+    func createCategoryNameList() {
+        if categoryList.count != 0 {
+            for i in 0 ... categoryList.count - 1 {
+                categoryNameList.append(categoryList[i].name)
+            }
+        }        
     }
 }
 
+extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    // ドラムロールの列数
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    // ドラムロールの行数
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return categoryList.count + 1
+    }
+    
+    // ドラムロールの各タイトル
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+       return categoryNameList[row]
+    }
+}
